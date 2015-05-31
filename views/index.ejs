@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no">
+  <title>Realtime Markdown Viewer</title>
+</head>
+
+<body>
+
+<textarea id="pad" style="width: 500px; height: 800px">Loading...</textarea>
+<div id="markdown"></div>
+
+<script src="/channel/bcsocket.js"></script>
+<script src="/share/share.uncompressed.js"></script>
+<script src="/share/textarea.js"></script>
+<script>
+window.onload = function() {
+	sharejs.open('x', 'text', function(error, doc) {
+	  var elem = document.getElementById('pad');
+	  doc.attach_textarea(elem);
+	});
+};
+</script>
+
+</body>
+</html>

@@ -1,0 +1,8 @@
+.DS_Store
+.node_modules/
+/node_modules/
+dump.rdb
+oauth.js
+cookie-secret.js
+newrelic_agent.log
+public/config.codekit
