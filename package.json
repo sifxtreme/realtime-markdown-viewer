@@ -14,9 +14,9 @@
   ],
   "author": "Asif Ahmed <asif.h.ahmed@gmail.com>",
   "dependencies": {
-    "coffee-script": "~1.7.1",
-    "ejs": "^2.3.1",
     "express": "^4.12.4",
+    "ejs": "^2.3.1",
+    "coffee-script": "~1.7.1",
     "redis": "^0.10.3",
     "share": "0.6.3"
   },

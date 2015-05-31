@@ -8,17 +8,31 @@
 
 <body>
 
-<textarea id="pad" style="width: 500px; height: 800px">Loading...</textarea>
-<div id="markdown"></div>
+<textarea id="pad" style="width: 500px; height: 800px; float: left;">Loading...</textarea>
+<div id="markdown" style="width: 500px; height: 800px; float: left;"></div>
 
 <script src="/channel/bcsocket.js"></script>
 <script src="/share/share.uncompressed.js"></script>
 <script src="/share/textarea.js"></script>
+<script src="https://cdn.rawgit.com/showdownjs/showdown/1.0.2/dist/showdown.min.js"></script>
 <script>
 window.onload = function() {
+	var converter = new showdown.Converter();
+	var pad = document.getElementById('pad');
+	var markdownArea = document.getElementById('markdown');
+
+	var displayMarkdown = function(){
+		var markdownText = pad.value;
+		html = converter.makeHtml(markdownText);
+		markdownArea.innerHTML = html;
+	};
+
+	setInterval(displayMarkdown, 1000);
+
+	pad.addEventListener("input", displayMarkdown);
+
 	sharejs.open('x', 'text', function(error, doc) {
-	  var elem = document.getElementById('pad');
-	  doc.attach_textarea(elem);
+	  doc.attach_textarea(pad);
 	});
 };
 </script>

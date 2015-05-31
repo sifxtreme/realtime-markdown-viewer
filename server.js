@@ -16,15 +16,7 @@ var sharejs = require('share');
 
 var options = {
   db: {type: 'redis'},
-  browserChannel: {cors: '*'},
-  auth: function(client, action) {
-    // This auth handler rejects any ops bound for docs starting with 'readonly'.
-    if (action.name === 'submit op' && action.docName.match(/^readonly/)) {
-      action.reject();
-    } else {
-      action.accept();
-    }
-  }
+  // browserChannel: {cors: '*'}
 };
 
 sharejs.server.attach(app, options);
@@ -37,19 +29,3 @@ var server = app.listen(8000, function () {
   console.log('Example app listening at http://%s:%s', host, port);
 
 });
-
-// var express = require('express');
-// var app = express();
-
-// app.get('/', function (req, res) {
-//   res.send('Hello World!');
-// });
-
-// var server = app.listen(3000, function () {
-
-//   var host = server.address().address;
-//   var port = server.address().port;
-
-//   console.log('Example app listening at http://%s:%s', host, port);
-
-// });
