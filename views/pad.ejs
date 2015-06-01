@@ -1,91 +1,113 @@
 <!DOCTYPE html>
 <html>
 <head>  
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, user-scalable=no">
-  <title>Realtime Markdown Viewer</title>
-  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
-  <style type="text/css">
-  	html, body, section, .full-height {
-  		height: 100%;
-  	} 
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <title>Realtime Markdown Viewer</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css">
+        html, body, section, .full-height {
+            height: 100%;
+        } 
 
-	  #pad{
-			position: fixed;
-			top: 0;
-			left: 0;
-			right: 0;
-			bottom: 0;
-			width: 50%;
-		  font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+        #pad{
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 50%;
+            font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
 
-	    border: none;
-	    overflow: auto;
-	    outline: none;
+            border: none;
+            overflow: auto;
+            outline: none;
 
-	    -webkit-box-shadow: none;
-	    -moz-box-shadow: none;
-	    box-shadow: none;
+            -webkit-box-shadow: none;
+            -moz-box-shadow: none;
+            box-shadow: none;
 
-	    resize: none;
-	  }
+            resize: none;
+        }
 
-	  #markdown {
-			overflow: auto;
-	  	border-left: 1px solid black;
-	  }
-  </style>
+        #markdown {
+            overflow: auto;
+            border-left: 1px solid black;
+        }
+    </style>
 </head>
 
 <body class="container-fluid">
 
-	<section class="row">
-		<div class="col-md-6 full-height">
-			<textarea id="pad">Write your text here..</textarea>
-		</div>
-		<div class="col-md-6 full-height" id="markdown"></div>
-	</section>
+    <section class="row">
+        <div class="col-md-6 full-height">
+            <textarea id="pad" <%if(!padName) { %>disabled<% } %> >Write your text here..</textarea>
+        </div>
+        <div class="col-md-6 full-height" id="markdown"></div>
+    </section>
 
-	<script src="/channel/bcsocket.js"></script>
-	<script src="/share/share.uncompressed.js"></script>
-	<script src="/share/textarea.js"></script>
-	<script src="https://cdn.rawgit.com/showdownjs/showdown/1.0.2/dist/showdown.min.js"></script>
-	<script>
-		window.onload = function() {
-			var converter = new showdown.Converter();
-			var pad = document.getElementById('pad');
-			var markdownArea = document.getElementById('markdown');
+    <script src="/channel/bcsocket.js"></script>
+    <script src="/share/share.uncompressed.js"></script>
+    <script src="/share/textarea.js"></script>
+    <script src="https://cdn.rawgit.com/showdownjs/showdown/1.0.2/dist/showdown.min.js"></script>
+    <script>
+        window.onload = function() {
+            var converter = new showdown.Converter();
+            var pad = document.getElementById('pad');
+            var markdownArea = document.getElementById('markdown');
 
-			var previousMarkdownValue;
+            pad.addEventListener('keydown',function(e) {
+                if(e.keyCode === 9) { // tab was pressed
+                    // get caret position/selection
+                    var start = this.selectionStart;
+                    var end = this.selectionEnd;
 
-			var displayMarkdown = function(){
-				var markdownText = pad.value;
-				previousMarkdownValue = markdownText;
-				html = converter.makeHtml(markdownText);
-				markdownArea.innerHTML = html;
-			};
+                    var target = e.target;
+                    var value = target.value;
 
-			var didChangeOccur = function(){
-				if(previousMarkdownValue != pad.value){
-					return true;
-				}
-				return false;
-			};
+                    // set textarea value to: text before caret + tab + text after caret
+                    target.value = value.substring(0, start)
+                                    + "\t"
+                                    + value.substring(end);
 
-			setInterval(function(){
-				if(didChangeOccur()){
-					displayMarkdown();
-				}
-			}, 1000);
+                    // put caret at right position again (add one for the tab)
+                    this.selectionStart = this.selectionEnd = start + 1;
 
-			pad.addEventListener('input', displayMarkdown);
+                    // prevent the focus lose
+                    e.preventDefault();
+                }
+            });
 
-			sharejs.open('<%= padName %>', 'text', function(error, doc) {
-			  doc.attach_textarea(pad);
-			  displayMarkdown();
-			});
-		};
-	</script>
+            var previousMarkdownValue;          
+
+            var displayMarkdown = function(){
+                var markdownText = pad.value;
+                previousMarkdownValue = markdownText;
+                html = converter.makeHtml(markdownText);
+                markdownArea.innerHTML = html;
+            };
+
+            var didChangeOccur = function(){
+                if(previousMarkdownValue != pad.value){
+                    return true;
+                }
+                return false;
+            };
+
+            setInterval(function(){
+                if(didChangeOccur()){
+                    displayMarkdown();
+                }
+            }, 1000);
+
+            pad.addEventListener('input', displayMarkdown);
+
+            sharejs.open('<%= padName %>', 'text', function(error, doc) {
+                doc.attach_textarea(pad);
+                displayMarkdown();
+            });
+        };
+    </script>
 
 </body>
 </html>
