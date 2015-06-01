@@ -6,43 +6,42 @@
   <title>Realtime Markdown Viewer</title>
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
   <style type="text/css">
+	  .full-height{
+			/* Firefox */
+			height: -moz-calc(100% - 18px);
+			/* WebKit */
+			height: -webkit-calc(100% - 18px);
+			/* Opera */
+			height: -o-calc(100% - 18px);
+			/* Standard */
+			height: calc(100% - 18px);
 
-  .full-height{
-		/* Firefox */
-		height: -moz-calc(100% - 18px);
-		/* WebKit */
-		height: -webkit-calc(100% - 18px);
-		/* Opera */
-		height: -o-calc(100% - 18px);
-		/* Standard */
-		height: calc(100% - 18px);
+			/*overflow: auto;*/
+	  }
 
-		overflow: auto;
-  }
+	  #pad{
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			width: 50%;
+		  font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
 
-  #pad{
-		position: fixed;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		width: 50%;
-	  font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+	    border: none;
+	    overflow: auto;
+	    outline: none;
 
-    border: none;
-    overflow: auto;
-    outline: none;
+	    -webkit-box-shadow: none;
+	    -moz-box-shadow: none;
+	    box-shadow: none;
 
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
-    box-shadow: none;
+	    resize: none;
+	  }
 
-    resize: none;
-  }
-
-  #markdown {
-  	border-left: 1px solid black;
-  }
+	  #markdown {
+	  	border-left: 1px solid black;
+	  }
   </style>
 </head>
 
@@ -73,7 +72,7 @@ window.onload = function() {
 		markdownArea.innerHTML = html;
 	};
 
-	didChangeOccur = function(){
+	var didChangeOccur = function(){
 		if(previousMarkdownValue != pad.value){
 			return true;
 		}
