@@ -6,18 +6,9 @@
   <title>Realtime Markdown Viewer</title>
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
   <style type="text/css">
-	  .full-height{
-			/* Firefox */
-			height: -moz-calc(100% - 18px);
-			/* WebKit */
-			height: -webkit-calc(100% - 18px);
-			/* Opera */
-			height: -o-calc(100% - 18px);
-			/* Standard */
-			height: calc(100% - 18px);
-
-			/*overflow: auto;*/
-	  }
+  	html, body, section, .full-height {
+  		height: 100%;
+  	} 
 
 	  #pad{
 			position: fixed;
@@ -40,59 +31,61 @@
 	  }
 
 	  #markdown {
+			overflow: auto;
 	  	border-left: 1px solid black;
 	  }
   </style>
 </head>
 
 <body class="container-fluid">
-<section class="row">
-	<div class="col-md-6 full-height">
-		<textarea id="pad">Write your text here..</textarea>
-	</div>
-	<div class="col-md-6 full-height" id="markdown"></div>
-</section>
 
-<script src="/channel/bcsocket.js"></script>
-<script src="/share/share.uncompressed.js"></script>
-<script src="/share/textarea.js"></script>
-<script src="https://cdn.rawgit.com/showdownjs/showdown/1.0.2/dist/showdown.min.js"></script>
-<script>
-window.onload = function() {
-	var converter = new showdown.Converter();
-	var pad = document.getElementById('pad');
-	var markdownArea = document.getElementById('markdown');
+	<section class="row">
+		<div class="col-md-6 full-height">
+			<textarea id="pad">Write your text here..</textarea>
+		</div>
+		<div class="col-md-6 full-height" id="markdown"></div>
+	</section>
 
-	var previousMarkdownValue;
+	<script src="/channel/bcsocket.js"></script>
+	<script src="/share/share.uncompressed.js"></script>
+	<script src="/share/textarea.js"></script>
+	<script src="https://cdn.rawgit.com/showdownjs/showdown/1.0.2/dist/showdown.min.js"></script>
+	<script>
+		window.onload = function() {
+			var converter = new showdown.Converter();
+			var pad = document.getElementById('pad');
+			var markdownArea = document.getElementById('markdown');
 
-	var displayMarkdown = function(){
-		var markdownText = pad.value;
-		previousMarkdownValue = markdownText;
-		html = converter.makeHtml(markdownText);
-		markdownArea.innerHTML = html;
-	};
+			var previousMarkdownValue;
 
-	var didChangeOccur = function(){
-		if(previousMarkdownValue != pad.value){
-			return true;
-		}
-		return false;
-	};
+			var displayMarkdown = function(){
+				var markdownText = pad.value;
+				previousMarkdownValue = markdownText;
+				html = converter.makeHtml(markdownText);
+				markdownArea.innerHTML = html;
+			};
 
-	setInterval(function(){
-		if(didChangeOccur()){
-			displayMarkdown();
-		}
-	}, 1000);
+			var didChangeOccur = function(){
+				if(previousMarkdownValue != pad.value){
+					return true;
+				}
+				return false;
+			};
 
-	pad.addEventListener("input", displayMarkdown);
+			setInterval(function(){
+				if(didChangeOccur()){
+					displayMarkdown();
+				}
+			}, 1000);
 
-	sharejs.open('x', 'text', function(error, doc) {
-	  doc.attach_textarea(pad);
-	  displayMarkdown();
-	});
-};
-</script>
+			pad.addEventListener('input', displayMarkdown);
+
+			sharejs.open('<%= padName %>', 'text', function(error, doc) {
+			  doc.attach_textarea(pad);
+			  displayMarkdown();
+			});
+		};
+	</script>
 
 </body>
 </html>

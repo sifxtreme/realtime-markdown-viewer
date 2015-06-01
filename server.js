@@ -7,10 +7,10 @@ app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/public'));
 
 app.get('/', function(req, res) {
-  res.render('pad');
+  res.render('pad', {padName: ""});
 });
 app.get('/(:id)', function(req, res) {
-  res.render('pad');
+  res.render('pad', {padName: req.params.id});
 });
 
 // get sharejs dependencies
@@ -19,7 +19,14 @@ var sharejs = require('share');
 
 var options = {
   db: {type: 'redis'},
-  // browserChannel: {cors: '*'}
+  auth: function(client, action) {
+    // This auth handler rejects any ops bound for docs starting with 'readonly'.
+    if (action.name === 'submit op' && action.docName === "") {
+      action.reject();
+    } else {
+      action.accept();
+    }
+  }
 };
 
 sharejs.server.attach(app, options);
