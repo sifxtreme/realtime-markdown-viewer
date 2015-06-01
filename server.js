@@ -17,19 +17,21 @@ app.get('/(:id)', function(req, res) {
 
 // get sharejs dependencies
 var sharejs = require('share');
-var redis;
+
+// set up redis server
+var redisClient;
 console.log(process.env.REDISTOGO_URL);
 if (process.env.REDISTOGO_URL) {
 	var rtg   = require("url").parse(process.env.REDISTOGO_URL);
-	redis = require("redis").createClient(rtg.port, rtg.hostname);
-	redis.auth(rtg.auth.split(":")[1]);
+	redisClient = require("redis").createClient(rtg.port, rtg.hostname);
+	redisClient.auth(rtg.auth.split(":")[1]);
 } else {
-  redis = require("redis").createClient();
+  redisClient = require("redis").createClient();
 }
 
 // options for sharejs 
 var options = {
-  client: redis,
+  db: {type: 'redis', client: redisClient},
   auth: function(client, action) {
     // this auth handler rejects any ops bound for docs starting with '' (home page)
     if (action.name === 'submit op' && action.docName === "") {
