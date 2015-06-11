@@ -1,50 +1,17 @@
+<!-- views/pad.ejs -->
+
 <!DOCTYPE html>
 <html>
-<head>  
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no">
+<head>
     <title>Realtime Markdown Viewer</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
-    <style type="text/css">
-        html, body, section, .full-height, textarea {
-            height: 100%;
-        } 
-
-        #pad{
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            width: 50%;
-            font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
-
-            border: none;
-            overflow: auto;
-            outline: none;
-
-            -webkit-box-shadow: none;
-            -moz-box-shadow: none;
-            box-shadow: none;
-
-            resize: none;
-        }
-
-        #markdown {
-            overflow: auto;
-            border-left: 1px solid black;
-        }
-    </style>
+    <link href="style.css" rel="stylesheet">
 </head>
 
 <body class="container-fluid">
 
     <section class="row">
-        <div class="col-md-6 full-height">
-<textarea id="pad" <%if(!padName) { %>disabled<% } %> >
-<%if(padName !== "") { %>
-Write your text here..
-<% } else { %>
+        <textarea class="col-md-6 full-height" id="pad">
 # Realtime Markdown Editor
 
 ### What is this?
@@ -68,76 +35,15 @@ This website uses the following to work:
  - [Node.js](https://nodejs.org/) - backend framework 
  - [Redis](http://redis.io/) - where we store our markdown documents
  - [Twitter Bootstrap](http://getbootstrap.com/) - makes everything a little prettier
-<% } %>
-</textarea>
-        </div>
+        </textarea>
         <div class="col-md-6 full-height" id="markdown"></div>
     </section>
 
+    <script src="https://cdn.rawgit.com/showdownjs/showdown/1.0.2/dist/showdown.min.js"></script>
     <script src="/channel/bcsocket.js"></script>
     <script src="/share/share.uncompressed.js"></script>
     <script src="/share/textarea.js"></script>
-    <script src="https://cdn.rawgit.com/showdownjs/showdown/1.0.2/dist/showdown.min.js"></script>
-    <script>
-        window.onload = function() {
-            var converter = new showdown.Converter();
-            var pad = document.getElementById('pad');
-            var markdownArea = document.getElementById('markdown');
-
-            pad.addEventListener('keydown',function(e) {
-                if(e.keyCode === 9) { // tab was pressed
-                    // get caret position/selection
-                    var start = this.selectionStart;
-                    var end = this.selectionEnd;
-
-                    var target = e.target;
-                    var value = target.value;
-
-                    // set textarea value to: text before caret + tab + text after caret
-                    target.value = value.substring(0, start)
-                                    + "\t"
-                                    + value.substring(end);
-
-                    // put caret at right position again (add one for the tab)
-                    this.selectionStart = this.selectionEnd = start + 1;
-
-                    // prevent the focus lose
-                    e.preventDefault();
-                }
-            });
-
-            var previousMarkdownValue;          
-
-            var displayMarkdown = function(){
-                var markdownText = pad.value;
-                previousMarkdownValue = markdownText;
-                html = converter.makeHtml(markdownText);
-                markdownArea.innerHTML = html;
-            };
-
-            var didChangeOccur = function(){
-                if(previousMarkdownValue != pad.value){
-                    return true;
-                }
-                return false;
-            };
-
-            setInterval(function(){
-                if(didChangeOccur()){
-                    displayMarkdown();
-                }
-            }, 1000);
-
-            pad.addEventListener('input', displayMarkdown);
-
-            sharejs.open('<%= padName %>', 'text', function(error, doc) {
-                if('<%= padName %>' !== ""){
-                    doc.attach_textarea(pad);
-                }
-                displayMarkdown();
-            });
-        };
-    </script>
+    <script src="script.js"></script>
 
 </body>
 </html>
