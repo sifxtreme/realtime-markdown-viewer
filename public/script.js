@@ -58,4 +58,6 @@ window.onload = function() {
         });        
     }
 
+    convertTextAreaToMarkdown();
+
 };
