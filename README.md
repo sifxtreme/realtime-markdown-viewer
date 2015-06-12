@@ -16,7 +16,7 @@ Type anything after the slash in "https://realtimemarkdown.herokuapp.com/" and j
 
 This website uses the following to work:
 
- - [Markdown](https://github.com/showdownjs/showdown) - Converts markdown text to beautiful HTML
+ - [Showdown](https://github.com/showdownjs/showdown) - Converts markdown text to beautiful HTML
  - [ShareJS](http://sharejs.org/) - allows for realtime editing of this textbox
  - [Node.js](https://nodejs.org/) - backend framework 
  - [Redis](http://redis.io/) - where we store our markdown documents
