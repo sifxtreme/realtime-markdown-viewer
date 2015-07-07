@@ -22,8 +22,16 @@ var sharejs = require('share');
 
 // set up redis server
 var redisClient;
-console.log(process.env.REDISTOGO_URL);
-if (process.env.REDISTOGO_URL) {
+
+if (process.env.VCAP_SERVICES) {
+  var appEnv = require("cfenv").getAppEnv();
+  var creds = appEnv.getServiceCreds("markdown-redis");
+  console.log(creds)
+  var host = creds.host || creds.hostname;
+  redisClient = require("redis").createClient(creds.port, host);
+  redisClient.auth(creds.password);
+} else if (process.env.REDISTOGO_UR) {
+  console.log(process.env.REDISTOGO_URL);
   var rtg   = require("url").parse(process.env.REDISTOGO_URL);
   redisClient = require("redis").createClient(rtg.port, rtg.hostname);
   redisClient.auth(rtg.auth.split(":")[1]);
@@ -31,7 +39,7 @@ if (process.env.REDISTOGO_URL) {
   redisClient = require("redis").createClient();
 }
 
-// options for sharejs 
+// options for sharejs
 var options = {
   db: {type: 'redis', client: redisClient}
 };
