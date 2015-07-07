@@ -39,7 +39,7 @@ if (process.env.VCAP_SERVICES) {
   redisClient = require("redis").createClient();
 }
 
-// options for sharejs 
+// options for sharejs
 var options = {
   db: {type: 'redis', client: redisClient}
 };

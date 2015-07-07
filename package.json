@@ -5,23 +5,33 @@
   "version": "1.0.0",
   "repository": {
     "type": "git",
-    "url": "git@github.com:sifxtreme/realtime-markdown.git"
+    "url": "git@github.com:jtuchscherer/realtime-markdown.git"
   },
   "keywords": [
     "markdown",
     "realtime",
-    "sharejs"
+    "sharejs",
+    "editor"
   ],
+  "scripts": {
+    "postinstall": "node_modules/.bin/bower install"
+  },
   "author": "Asif Ahmed <asif.h.ahmed@gmail.com>",
+  "contributors": [
+    { "name" : "Johannes Tuchscherer",
+      "email" : "jtuchscherer@gmail.com"
+    }
+  ],
   "dependencies": {
-    "express": "^4.12.4",
-    "ejs": "^2.3.1",
-    "redis": "^0.10.3",
+    "bower": "1.4.1",
+    "express": "4.13.1",
+    "ejs": "2.3.2",
+    "redis": "0.12.1",
     "share": "0.6.3",
     "cfenv": "1.0.0"
   },
   "engines": {
-    "node": "0.10.x",
-    "npm": "1.3.x"
+    "node": "0.12.6",
+    "npm": "2.11.2"
   }
 }
