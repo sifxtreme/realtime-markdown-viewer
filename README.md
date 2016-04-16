@@ -6,11 +6,11 @@ Type your markdown into the box on the left and immediately see if on the box on
 
 ### How to use this?
 
-Type anything after the slash in "https://realtimemarkdown.herokuapp.com/" and just start typing. If you don't feel typing in the address bar, feel free to go to one of these markdown pads:
+Type anything after the slash in "https://node-markdown.herokuapp.com/" and just start typing. If you don't feel typing in the address bar, feel free to go to one of these markdown pads:
 
-- [https://realtimemarkdown.herokuapp.com/sample](https://realtimemarkdown.herokuapp.com/sample)
-- [https://realtimemarkdown.herokuapp.com/my_project](https://realtimemarkdown.herokuapp.com/my_project)
-- [https://realtimemarkdown.herokuapp.com/whatever](https://realtimemarkdown.herokuapp.com/whatever)
+- [https://node-markdown.herokuapp.com/sample](https://node-markdown.herokuapp.com/sample)
+- [https://node-markdown.herokuapp.com/my_project](https://node-markdown.herokuapp.com/my_project)
+- [https://node-markdown.herokuapp.com/whatever](https://node-markdown.herokuapp.com/whatever)
 
 ### How was this built?
 
